@@ -1,16 +1,22 @@
 <p>Luke's route</p>
-
-
 <script lang="ts">
-    function addPrescription(){
-        alert('Enter your prescription details!');
+    let prescriptions = [];
+    let pills = '';
+    let perDay = '';
+    let hoursBetween = '';
+
+    function addPrescription() {
+        if (pills && perDay && hoursBetween) {
+            prescriptions.push({ pills, perDay, hoursBetween });
+            pills = '';
+            perDay = '';
+            hoursBetween = '';
+        } else {
+            alert('Please fill in all fields!');
+        }
     }
+
+
+
 </script>
 
-<btton onclick = {addPrescription}>Add new prescription</btton>
-
-<style>
-    button {
-        font-size: 3em;
-    }
-</style>
