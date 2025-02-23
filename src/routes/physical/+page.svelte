@@ -19,9 +19,10 @@
 	let minutesPerDay = $state(15);
 
 	let numberOfExercises = 0;
-	let currentExerciseNumber = 0;
-	let currentExercise = '';
+	let currentExerciseNumber = $state(0);
+	let currentExercise = $state("");
 	function findNumberOfExercises() {
+		numberOfExercises = 0;
 		for (let i = 0; i < exerciseTypeEnabled.length; i++) {
 			if (exerciseTypeEnabled[i]) {
 				for (let v = 0; v < exerciseSubEnabled[i].length; v++) {
@@ -41,6 +42,7 @@
 					if (exerciseSubEnabled[i][v]) {
 						if (count == currentExerciseNumber) {
 							currentExercise = exerciseSubNames[i][v];
+							currentExerciseNumber++;
 							return;
 						} else {
 							count++;
@@ -49,6 +51,7 @@
 				}
 			}
 		}
+		currentExerciseNumber++;
 	}
 
 	function increment() {
@@ -61,10 +64,15 @@
 		setupStage = 0;
 	}
 	function goToHome() {
+		stopTimer();
+		currentExerciseNumber = 0;
+		resetExerciseTimer();
 		setupStage = 2;
 	}
 
 	function startGame() {
+		findNumberOfExercises();
+		findCurrentExercise();
 		resetTimer();
 		startTimer();
 		setupStage++;
@@ -75,7 +83,6 @@
 	let interval;
 	let remainingTime = $state(minutesPerDay * 60);
 	let remainingExerciseTime = $state(minutesPerDay * 60);
-	let remainingExercise = $state(minutesPerDay * 60);
 	let alarm: HTMLAudioElement;
 
 	onMount(() => {
@@ -92,8 +99,12 @@
 					// @ts-ignore
 					remainingTime -= 1;
 					remainingExerciseTime -= 1;
-					if (remainingExerciseTime < 0) {
+					if (remainingExerciseTime < 1) {
 						findCurrentExercise();
+						resetExerciseTimer();
+						if (alarm) {
+						playAlarm();
+						}
 					}
 				} else {
 					// @ts-ignore
@@ -102,6 +113,8 @@
 						playAlarm();
 					}
 					interval = null;
+					resetTimer();
+					stopTimer();
 				}
 			}, 1000);
 		}
@@ -111,6 +124,10 @@
 		// @ts-ignore
 		stopTimer();
 		remainingTime = minutesPerDay * 60;
+		remainingExerciseTime = (minutesPerDay * 60)/numberOfExercises;
+	}
+	function resetExerciseTimer(){
+		remainingExerciseTime = (minutesPerDay * 60)/numberOfExercises;
 	}
 	// @ts-ignore
 	function updateTime(event) {
@@ -166,8 +183,9 @@
 
 	<button onclick={increment} style="background-color:{'#39c41f'}"> Let's go! </button>
 {:else if setupStage == 3}
-	<h1>Total Exercise: {Math.floor(remainingTime)}s</h1>
-	<h1>Current Exercise: {Math.floor(remainingTime)}s</h1>
+	<h1>Workout Time: {Math.floor(remainingTime)}s</h1>
+	<h1>Exercise Time: {Math.floor(remainingExerciseTime)}s</h1>
+	<h1>Current Exercise: {currentExercise}</h1>
 	<!-- <button onclick={startTimer}>Start</button>
 <button onclick={stopTimer}>Stop</button>
 <button onclick={resetTimer}>Reset</button> -->
