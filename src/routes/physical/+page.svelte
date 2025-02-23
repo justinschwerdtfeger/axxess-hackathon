@@ -147,11 +147,13 @@
 	}
 </script>
 
-<h1>Welcome to the exercise trainer!</h1>
+<!-- <h1>Welcome to the exercise trainer!</h1> -->
+<h1 class="h1 items-center flex flex-col">Physical Trainer</h1>
+<div class="flex flex-col items-center justify-center auto-rows-auto" >
 
 {#if setupStage == 0}
 	To get started, select the types of exercises you would like to do:<br />
-
+	<label class="left-justify">
 	{#each exerciseTypeNames as exerciseType, i}
 		<label>
 			<input type="checkbox" bind:checked={exerciseTypeEnabled[i]} />
@@ -173,6 +175,7 @@
 			{/each}
 		{/if}
 	{/each}
+	</label>
 
 	<button onclick={increment} style="background-color:{'#39c41f'}"> Next </button>
 {:else if setupStage == 1}
@@ -198,3 +201,5 @@
 
 	<button onclick={setupStart} style="background-color:{'#4a4a4a'}"> Adjust exercises </button>
 {/if}
+
+</div>
