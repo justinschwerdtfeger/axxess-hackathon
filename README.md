@@ -8,3 +8,5 @@ Our project has options for the user to pick what feature they want to use from 
 We built a website using Svelte, Tailwind, Typescript, Rust, Tauri, and other libaries. Then we ported it to support other devices.
 Challenges we ran into
 ## Where can I get it?
+Try it out at https://wellio.vercel.app
+or grab a release at https://github.com/justinschwerdtfeger/wellio/releases/tag/0.1.0
