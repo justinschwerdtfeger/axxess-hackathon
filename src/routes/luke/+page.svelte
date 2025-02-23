@@ -28,6 +28,25 @@
             return prescriptions;
         });
     }
+
+    function takePill(index: number) {
+        prescriptions.update(prescriptions => {
+            if (prescriptions[index].pills > 0) {
+                prescriptions[index].pills -= 1;
+            }
+            return prescriptions;
+        });
+    }
+
+    function removePrescription(index: number) {
+        prescriptions.update(prescriptions => prescriptions.filter((_, i) => i !== index));
+    }
+
+    $: {
+        if ($prescriptions[selectedPrescriptionIndex] && $prescriptions[selectedPrescriptionIndex].pills === 0) {
+            removePrescription(selectedPrescriptionIndex);
+        }
+    }
 </script>
 
 <form on:submit|preventDefault={addPrescription}>
@@ -57,6 +76,20 @@
         {/each}
     </select>
 </label>
+
+{#if $prescriptions.length > 0}
+    <button type="button" on:click={() => removePrescription(selectedPrescriptionIndex)}>
+        Remove selected prescription 
+    </button>
+{/if}
+
+{#if $prescriptions.length > 0}
+    <button type="button" on:click={() => takePill(selectedPrescriptionIndex)}>
+        Taken pill
+    </button>
+{/if}
+
+
 
 {#if $prescriptions.length > 0}
     <div>
