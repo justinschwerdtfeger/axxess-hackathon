@@ -87,18 +87,38 @@
 		return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
 	}
 </script>
-
-<p>Dash's route</p>
-<p style="font-size: 20px;">Countdown:</p>
-<h1 style="font-size: 30px;">{formatTime(remainingTime)}</h1>
-
-<input class="text-black" type="number" bind:value={tempTime} min="1" on:change={updateTime} />
 <br />
-<button class="btn preset-filled-success-500" on:click={startTimer}>Start</button>
-<button class="btn preset-filled-error-500" on:click={stopTimer}>Stop</button>
-<button class="btn preset-filled-primary-500" on:click={resetTimer}>Reset</button>
-<button class="btn preset-tonal-success" on:click={add}>Add</button>
 <br />
-<button class="btn preset-outlined-surface-500" on:click={add15s}>15s</button>
-<button class="btn preset-outlined-surface-500" on:click={add15m}>15m</button>
-<button class="btn preset-outlined-surface-500" on:click={add1h}>1h</button>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="flex flex-col items-center justify-center">
+	<h1 class="h1">Countdown</h1>
+	<h1 class="h1">{formatTime(remainingTime)}</h1>
+
+	<!-- <input class="text-black" type="number" bind:value={tempTime} min="1" on:change={updateTime} /> -->
+
+	<label class="label max-w-sm">
+		<span class="label-text"></span>
+		<input class="input" type="number" bind:value={tempTime} min="1" on:change={updateTime} />
+	  </label>
+
+
+	
+	<br />
+	<div class="flex flex-row items-center justify-center">
+	<button class="btn preset-filled-success-500" on:click={startTimer}>Start</button>
+	<button class="btn preset-filled-error-500" on:click={stopTimer}>Stop</button>
+	<button class="btn preset-filled-primary-500" on:click={resetTimer}>Reset</button>
+	<button class="btn preset-tonal-success" on:click={add}>Add</button>
+	</div>
+	<br />
+	<div class="flex flex-row items-center justify-center">
+	<button class="btn preset-outlined-surface-500" on:click={add15s}>15s</button>
+	<button class="btn preset-outlined-surface-500" on:click={add15m}>15m</button>
+	<button class="btn preset-outlined-surface-500" on:click={add1h}>1h</button>
+</div>
+</div>
