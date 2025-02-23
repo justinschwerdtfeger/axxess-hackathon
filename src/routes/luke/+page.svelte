@@ -54,11 +54,7 @@
     $: {
         if ($prescriptions[selectedPrescriptionIndex] && $prescriptions[selectedPrescriptionIndex].pills === 0) {
             removePrescription(selectedPrescriptionIndex);
-            if (success) {
-                success.play().catch(error => {
-                    console.error("Failed to play audio:", error);
-                });
-            }
+            success.play();
         }
     }
 </script>
@@ -108,7 +104,7 @@
         <h3>Selected Prescription</h3>
         <label>
             Number of pills:
-            <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => updatePills(selectedPrescriptionIndex, e.target.value)}>
+            <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => updatePills(selectedPrescriptionIndex, (e.target as HTMLInputElement).value)}>
         </label>
         <br>
         Pills per day: {$prescriptions[selectedPrescriptionIndex].perDay}
@@ -119,10 +115,10 @@
 
 <style>
     button {
-        font-size: 1em;
+        font-size: 2em;
     }
     form {
-        margin-bottom: 1em;
+        margin-bottom: 2em;
     }
     label {
         display: block;
@@ -130,7 +126,7 @@
     }
     ul {
         list-style-type: none;
-        padding: 0;
+        padding: 1;
     }
     li {
         margin-bottom: 1em;
