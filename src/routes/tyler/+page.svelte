@@ -9,14 +9,40 @@
     let minutesPerDay = $state(15);
 
     let numberOfExercises = 0
+    let currentExerciseNumber = 0
+    let currentExercise = ""
     function findNumberOfExercises(){
+        for(let i=0; i<exerciseTypeEnabled.length; i++){
+            if(exerciseTypeEnabled[i]){
+                for(let v=0; v<exerciseSubEnabled[i].length;v++){
+                    if(exerciseSubEnabled[i][v]){
+                        numberOfExercises++;
+                    }
+                }
+            }
+        }
+    }
 
+    function findCurrentExercise(){
+        let count = 0
+        for(let i=0; i<exerciseTypeEnabled.length; i++){
+            if(exerciseTypeEnabled[i]){
+                for(let v=0; v<exerciseSubEnabled[i].length;v++){
+                    if(exerciseSubEnabled[i][v]){
+                        if(count==currentExerciseNumber){
+                            currentExercise = exerciseSubNames[i][v]
+                            return
+                        }else{
+                            count++
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
     function increment() {
-        resetTimer()
-        startTimer()
 		setupStage++;
 	}
     function decrement() {
@@ -29,10 +55,17 @@
 		setupStage = 2;
 	}
 
+    function startGame(){
+        resetTimer()
+        startTimer()
+		setupStage++;
+    }
+
     import { onMount } from 'svelte';
     // @ts-ignore
     let interval;
     let remainingTime = $state(minutesPerDay*60);
+    let remainingExerciseTime = $state(minutesPerDay*60);
     let remainingExercise = $state((minutesPerDay*60));
     let alarm: HTMLAudioElement;
 
@@ -49,6 +82,10 @@ onMount(() => {
                 if(remainingTime > 0){
                     // @ts-ignore
                     remainingTime -= 1;
+                    remainingExerciseTime -= 1;
+                    if(remainingExerciseTime<0){
+                        findCurrentExercise()
+                    }
                 }else{
                     // @ts-ignore
                     clearInterval(interval);
@@ -153,7 +190,7 @@ bind:value={minutesPerDay}
 {:else}
 
 
-<button onclick={increment} style="background-color:{"#39c41f"}">
+<button onclick={startGame} style="background-color:{"#39c41f"}">
 	Start Exercise!
 </button>
 <br>
