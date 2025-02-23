@@ -114,15 +114,6 @@
         <button type="submit">Add new prescription</button>
     </form>
 
-    <label>
-        Select a prescription:
-        <select bind:value={selectedPrescriptionIndex}>
-            {#each $prescriptions as _, index}
-                <option value={index}>Prescription {index + 1}</option>
-            {/each}
-        </select>
-    </label>
-
     {#if $prescriptions.length > 0}
         <button type="button" on:click={() => removePrescription(selectedPrescriptionIndex)}>
             Remove selected prescription 
@@ -135,13 +126,20 @@
         </button>
     {/if}
 
+    <label class="dropdown">
+        Select a prescription:
+        <select bind:value={selectedPrescriptionIndex}>
+            {#each $prescriptions as _, index}
+                <option value={index}>Prescription {index + 1}</option>
+            {/each}
+        </select>
+    </label>
+
     {#if $prescriptions.length > 0}
         <div>
             <h3>Selected Prescription</h3>
-            <label>
-                Number of pills:
-                <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => { if (e.target !== null) updatePills(selectedPrescriptionIndex, (e.target as HTMLInputElement).value); }}>
-            </label>
+            <br>
+            Number of pills: {$prescriptions[selectedPrescriptionIndex].pills}
             <br>
             Pills per day: {$prescriptions[selectedPrescriptionIndex].perDay}
             <br>
@@ -187,5 +185,9 @@
 
     li {
         margin-bottom: 1em;
+    }
+
+    .dropdown {
+        margin-top: 4em; 
     }
 </style>
