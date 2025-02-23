@@ -2,12 +2,21 @@
 <script lang="ts">
     import { prescriptions } from './stores';
     import { get } from 'svelte/store';
+    import { onMount } from 'svelte';
 
     let pills = '';
     let perDay = '';
     let hoursBetween = '';
     let selectedPrescriptionIndex = 0;
-    let success = new Audio("ding.mp3");
+    let success: HTMLAudioElement;
+
+    onMount(() => {
+        success = new Audio("ding.mp3");
+        success.onerror = () => {
+            console.error("Failed to load audio file.");
+        };
+    });
+
     function addPrescription() {
         if (pills && perDay && hoursBetween) {
             prescriptions.update(prescriptions => {
@@ -45,7 +54,11 @@
     $: {
         if ($prescriptions[selectedPrescriptionIndex] && $prescriptions[selectedPrescriptionIndex].pills === 0) {
             removePrescription(selectedPrescriptionIndex);
-            success.play();
+            if (success) {
+                success.play().catch(error => {
+                    console.error("Failed to play audio:", error);
+                });
+            }
         }
     }
 </script>
@@ -89,8 +102,6 @@
         Taken pill
     </button>
 {/if}
-
-
 
 {#if $prescriptions.length > 0}
     <div>
