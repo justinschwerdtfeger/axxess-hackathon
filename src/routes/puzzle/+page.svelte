@@ -98,12 +98,12 @@
 <div class="flex flex-col items-center justify-center auto-rows-auto" >
 <label class="flex items-center space-x-2">
 <br>
-<button class="btn preset-filled-primary-500" onclick={handleUp}>Up</button>
+<button class="btn preset-filled-primary-500" onclick={handleUp}>&uarr;</button>
 <br>
-<button class="btn preset-filled-primary-500" onclick={handleLeft}>Left</button>
-<button class="btn preset-filled-primary-500" onclick={handleRight}>Right</button>
+<button class="btn preset-filled-primary-500" onclick={handleLeft}>&larr;</button>
+<button class="btn preset-filled-primary-500" onclick={handleRight}>&rarr;</button>
 <br>
-<button class="btn preset-filled-primary-500" onclick={handleDown}>Down</button>
+<button class="btn preset-filled-primary-500" onclick={handleDown}>&darr;</button>
 </div>
 
 
