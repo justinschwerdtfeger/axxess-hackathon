@@ -16,7 +16,7 @@
 		[true, true, true],
 		[true, true, true]
 	]);
-	let minutesPerDay = $state(15);
+	let minutesPerDay = $state(5);
 
 	let numberOfExercises = 0;
 	let currentExerciseNumber = $state(0);
@@ -155,7 +155,7 @@
 	To get started, select the types of exercises you would like to do:<br />
 	<label class="left-justify">
 	{#each exerciseTypeNames as exerciseType, i}
-		<label>
+		<label class="flex items-center space-x-2">
 			<input type="checkbox" bind:checked={exerciseTypeEnabled[i]} />
 
 			{exerciseType}
@@ -176,15 +176,21 @@
 		{/if}
 	{/each}
 	</label>
-
-	<button onclick={increment} style="background-color:{'#39c41f'}"> Next </button>
+	<button class="btn preset-filled-success-500" onclick={increment}>Next</button>
+	<!-- <button onclick={increment} style="background-color:{'#39c41f'}"> Next </button> -->
 {:else if setupStage == 1}
 	Enter how many minutes you would like to spend each day exercising:<br />
-	<input type="number" style="background-color:{'#4a4a4a'}" bind:value={minutesPerDay} />
+	<label class="label max-w-sm">
+		<span class="label-text"></span>
+		<input class="input" type="number" bind:value={minutesPerDay} min="1" onchange={updateTime} />
+	</label>
+	<!-- <input type="number" style="background-color:{'#4a4a4a'}" bind:value={minutesPerDay} /> -->
 	<br />
-	<button onclick={decrement} style="background-color:{'#c51f23'}"> Back </button>
 
-	<button onclick={increment} style="background-color:{'#39c41f'}"> Let's go! </button>
+	<button class="btn preset-filled-success-500" onclick={increment}>Let's go!</button>
+	<!-- <button onclick={increment} style="background-color:{'#39c41f'}"> Let's go! </button> -->
+	<button class="btn preset-filled-error-500" onclick={decrement}>Back</button>
+	<!-- <button onclick={decrement} style="background-color:{'#c51f23'}"> Back </button> -->
 {:else if setupStage == 3}
 	<h1>Workout Time: {Math.floor(remainingTime)}s</h1>
 	<h1>Exercise Time: {Math.floor(remainingExerciseTime)}s</h1>
@@ -193,13 +199,15 @@
 <button onclick={stopTimer}>Stop</button>
 <button onclick={resetTimer}>Reset</button> -->
 	<br />
-	<button onclick={goToHome} style="background-color:{'#c51f23'}"> Back </button>
+	<button class="btn preset-filled-error-500" onclick={goToHome}>Back</button>
+	<!-- <button onclick={goToHome} style="background-color:{'#c51f23'}"> Back </button> -->
 {:else}
-	<button onclick={startGame} style="background-color:{'#39c41f'}"> Start Exercise! </button>
+<button class="btn preset-filled-success-500" onclick={startGame}>Let's go!</button>
+	<!-- <button onclick={startGame} style="background-color:{'#39c41f'}"> Start Exercise! </button> -->
 	<br />
 	<br />
-
-	<button onclick={setupStart} style="background-color:{'#4a4a4a'}"> Adjust exercises </button>
+	<button class="btn preset-filled-primary-500" onclick={setupStart}>Adjust Exercises</button>
+	<!-- <button onclick={setupStart} style="background-color:{'#4a4a4a'}"> Adjust exercises </button> -->
 {/if}
 
 </div>
