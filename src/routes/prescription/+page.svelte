@@ -131,8 +131,7 @@
 			type="button"
 			class="btn preset-filled-error-500"
 			on:click={() => removePrescription(selectedPrescriptionIndex)}
-		>
-			Remove selected prescription
+		>   Remove selected prescription
 		</button>
 	{/if}
 	{#if $prescriptions.length > 0}
@@ -151,7 +150,7 @@
 	{#if $prescriptions.length > 0}
 	<label>
 		Select a prescription:
-		<select bind:value={selectedPrescriptionIndex}>
+		<select class="select" bind:value={selectedPrescriptionIndex}>
 			{#each $prescriptions as _, index}
 				<option value={index}>Prescription {index + 1}</option>
 			{/each}
@@ -169,9 +168,8 @@
 			Hours between pills: {$prescriptions[selectedPrescriptionIndex].hoursBetween}
 		</div>
 	{/if}
-
 	{#if remainingTime > 0 && $prescriptions.length > 0}
-		<div>
+		<div class="flex flex-col items-center justify-center">
 			<h3>Time until next pill: {formatTime(remainingTime)}</h3>
 		</div>
 	{/if}
