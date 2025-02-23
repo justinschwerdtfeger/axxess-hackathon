@@ -9,6 +9,8 @@
     let hoursBetween = '';
     let selectedPrescriptionIndex = 0;
     let success: HTMLAudioElement;
+    let remainingTime = 0;
+    let timerInterval: ReturnType<typeof setInterval>;
 
     onMount(() => {
         success = new Audio("ding.mp3");
@@ -42,6 +44,7 @@
         prescriptions.update(prescriptions => {
             if (prescriptions[index].pills > 0) {
                 prescriptions[index].pills -= 1;
+                setTimer(prescriptions[index]);
             }
             return prescriptions;
         });
@@ -51,14 +54,27 @@
         prescriptions.update(prescriptions => prescriptions.filter((_, i) => i !== index));
     }
 
+    function setTimer(prescription: { pills: number; perDay: number; hoursBetween: number }) {
+        const milliseconds = prescription.hoursBetween * 60 * 60 * 1000;
+        remainingTime = milliseconds;
+
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+
+        timerInterval = setInterval(() => {
+            remainingTime -= 1000;
+            if (remainingTime <= 0) {
+                clearInterval(timerInterval);
+                alert(`Time to take your next pill for prescription with ${prescription.pills} pills, ${prescription.perDay} per day, ${prescription.hoursBetween} hours between.`);
+            }
+        }, 1000);
+    }
+
     $: {
         if ($prescriptions[selectedPrescriptionIndex] && $prescriptions[selectedPrescriptionIndex].pills === 0) {
             removePrescription(selectedPrescriptionIndex);
-            if (success) {
-                success.play().catch(error => {
-                    console.error("Failed to play audio:", error);
-                });
-            }
+            success.play();
         }
     }
 </script>
@@ -108,12 +124,18 @@
         <h3>Selected Prescription</h3>
         <label>
             Number of pills:
-            <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => updatePills(selectedPrescriptionIndex, e.target.value)}>
+            <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => { if (e.target !== null) updatePills(selectedPrescriptionIndex, (e.target as HTMLInputElement).value); }}>
         </label>
         <br>
         Pills per day: {$prescriptions[selectedPrescriptionIndex].perDay}
         <br>
         Hours between pills: {$prescriptions[selectedPrescriptionIndex].hoursBetween}
+    </div>
+{/if}
+
+{#if remainingTime > 0 && $prescriptions.length > 0}
+    <div>
+        <h3>Time until next pill: {Math.floor(remainingTime / 1000)} seconds</h3>
     </div>
 {/if}
 
