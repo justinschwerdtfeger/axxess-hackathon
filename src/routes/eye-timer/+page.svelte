@@ -7,7 +7,7 @@
 	let remainingTime = 0;
 	let alarm: HTMLAudioElement;
 	let checking = false;
-	let state = $state(false);
+	// let state = $state(false);
 	onMount(() => {
 		alarm = new Audio('beep.mp3');
 		alarm.onerror = () => {
@@ -79,7 +79,7 @@
 	}
 	function playAlarm() {
 		alarm.play();
-		alert("Time's up!"); // Optional: show an alert
+		alert("Time to rest your eyes and take a break!"); // Optional: show an alert
 	}
 	function formatTime(seconds: number) {
 		const hours = Math.floor(seconds / 3600);
@@ -121,8 +121,8 @@
 		</div>
 	</div>
 	<br />
-	<div class="flex flex-row items-center justify-center">
+	<!-- <div class="flex flex-row items-center justify-center">
 		<h1 >Break Toggle</h1>
 		<Switch name="example" bind:checked={state} onCheckedChange={console.log} />
-	</div>
+	</div> -->
 </div>
