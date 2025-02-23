@@ -9,12 +9,17 @@
     let hoursBetween = '';
     let selectedPrescriptionIndex = 0;
     let success: HTMLAudioElement;
+    let alarm: HTMLAudioElement;
     let remainingTime = 0;
     let timerInterval: ReturnType<typeof setInterval>;
 
     onMount(() => {
         success = new Audio("ding.mp3");
         success.onerror = () => {
+            console.error("Failed to load audio file.");
+        };
+        alarm = new Audio("beep.mp3");
+        alarm.onerror = () => {
             console.error("Failed to load audio file.");
         };
     });
@@ -66,6 +71,9 @@
             remainingTime -= 1000;
             if (remainingTime <= 0) {
                 clearInterval(timerInterval);
+                if(alarm){
+                        alarm.play();
+                    }
                 alert(`Time to take your next pill for prescription with ${prescription.pills} pills, ${prescription.perDay} per day, ${prescription.hoursBetween} hours between.`);
             }
         }, 1000);
