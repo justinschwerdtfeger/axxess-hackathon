@@ -1,4 +1,3 @@
-<p>Luke's route</p>
 <script lang="ts">
     import { prescriptions } from './stores';
     import { get } from 'svelte/store';
@@ -71,12 +70,20 @@
             remainingTime -= 1000;
             if (remainingTime <= 0) {
                 clearInterval(timerInterval);
-                if(alarm){
-                        alarm.play();
-                    }
+                if (alarm) {
+                    alarm.play();
+                }
                 alert(`Time to take your next pill for prescription with ${prescription.pills} pills, ${prescription.perDay} per day, ${prescription.hoursBetween} hours between.`);
             }
         }, 1000);
+    }
+
+    function formatTime(ms: number) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const seconds = String(totalSeconds % 60).padStart(2, '0');
+        return `${hours}:${minutes}:${seconds}`;
     }
 
     $: {
@@ -87,81 +94,97 @@
     }
 </script>
 
-<form on:submit|preventDefault={addPrescription}>
-    <label>
-        Number of pills:
-        <input type="number" bind:value={pills} required>
-    </label>
-    <br>
-    <label>
-        Pills per day:
-        <input type="number" bind:value={perDay} required>
-    </label>
-    <br>
-    <label>
-        Hours between pills:
-        <input type="number" bind:value={hoursBetween} required>
-    </label>
-    <br>
-    <button type="submit">Add new prescription</button>
-</form>
-
-<label>
-    Select a prescription:
-    <select bind:value={selectedPrescriptionIndex}>
-        {#each $prescriptions as _, index}
-            <option value={index}>Prescription {index + 1}</option>
-        {/each}
-    </select>
-</label>
-
-{#if $prescriptions.length > 0}
-    <button type="button" on:click={() => removePrescription(selectedPrescriptionIndex)}>
-        Remove selected prescription 
-    </button>
-{/if}
-
-{#if $prescriptions.length > 0}
-    <button type="button" on:click={() => takePill(selectedPrescriptionIndex)}>
-        Taken pill
-    </button>
-{/if}
-
-{#if $prescriptions.length > 0}
-    <div>
-        <h3>Selected Prescription</h3>
+<div class="container">
+    <form on:submit|preventDefault={addPrescription}>
         <label>
             Number of pills:
-            <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => { if (e.target !== null) updatePills(selectedPrescriptionIndex, (e.target as HTMLInputElement).value); }}>
+            <input type="number" bind:value={pills} required>
         </label>
         <br>
-        Pills per day: {$prescriptions[selectedPrescriptionIndex].perDay}
+        <label>
+            Pills per day:
+            <input type="number" bind:value={perDay} required>
+        </label>
         <br>
-        Hours between pills: {$prescriptions[selectedPrescriptionIndex].hoursBetween}
-    </div>
-{/if}
+        <label>
+            Hours between pills:
+            <input type="number" bind:value={hoursBetween} required>
+        </label>
+        <br>
+        <button type="submit">Add new prescription</button>
+    </form>
 
-{#if remainingTime > 0 && $prescriptions.length > 0}
-    <div>
-        <h3>Time until next pill: {Math.floor(remainingTime / 1000)} seconds</h3>
-    </div>
-{/if}
+    <label>
+        Select a prescription:
+        <select bind:value={selectedPrescriptionIndex}>
+            {#each $prescriptions as _, index}
+                <option value={index}>Prescription {index + 1}</option>
+            {/each}
+        </select>
+    </label>
+
+    {#if $prescriptions.length > 0}
+        <button type="button" on:click={() => removePrescription(selectedPrescriptionIndex)}>
+            Remove selected prescription 
+        </button>
+    {/if}
+
+    {#if $prescriptions.length > 0}
+        <button type="button" on:click={() => takePill(selectedPrescriptionIndex)}>
+            Taken pill
+        </button>
+    {/if}
+
+    {#if $prescriptions.length > 0}
+        <div>
+            <h3>Selected Prescription</h3>
+            <label>
+                Number of pills:
+                <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => { if (e.target !== null) updatePills(selectedPrescriptionIndex, (e.target as HTMLInputElement).value); }}>
+            </label>
+            <br>
+            Pills per day: {$prescriptions[selectedPrescriptionIndex].perDay}
+            <br>
+            Hours between pills: {$prescriptions[selectedPrescriptionIndex].hoursBetween}
+        </div>
+    {/if}
+
+    {#if remainingTime > 0 && $prescriptions.length > 0}
+        <div>
+            <h3>Time until next pill: {formatTime(remainingTime)}</h3>
+        </div>
+    {/if}
+</div>
 
 <style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+    }
+
     button {
         font-size: 1em;
+        margin-top: 0.5em;
     }
+
     form {
         margin-bottom: 1em;
     }
+
     label {
         display: block;
         margin-bottom: 0.5em;
     }
+
     ul {
         list-style-type: none;
         padding: 0;
     }
+
     li {
         margin-bottom: 1em;
     }
