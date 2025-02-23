@@ -9,6 +9,8 @@
     let hoursBetween = '';
     let selectedPrescriptionIndex = 0;
     let success: HTMLAudioElement;
+    let remainingTime = 0;
+    let timerInterval: ReturnType<typeof setInterval>;
 
     onMount(() => {
         success = new Audio("ding.mp3");
@@ -42,6 +44,7 @@
         prescriptions.update(prescriptions => {
             if (prescriptions[index].pills > 0) {
                 prescriptions[index].pills -= 1;
+                setTimer(prescriptions[index]);
             }
             return prescriptions;
         });
@@ -49,6 +52,23 @@
 
     function removePrescription(index: number) {
         prescriptions.update(prescriptions => prescriptions.filter((_, i) => i !== index));
+    }
+
+    function setTimer(prescription: { pills: number; perDay: number; hoursBetween: number }) {
+        const milliseconds = prescription.hoursBetween * 60 * 60 * 1000;
+        remainingTime = milliseconds;
+
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+
+        timerInterval = setInterval(() => {
+            remainingTime -= 1000;
+            if (remainingTime <= 0) {
+                clearInterval(timerInterval);
+                alert(`Time to take your next pill for prescription with ${prescription.pills} pills, ${prescription.perDay} per day, ${prescription.hoursBetween} hours between.`);
+            }
+        }, 1000);
     }
 
     $: {
@@ -104,7 +124,7 @@
         <h3>Selected Prescription</h3>
         <label>
             Number of pills:
-            <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => updatePills(selectedPrescriptionIndex, (e.target as HTMLInputElement).value)}>
+            <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => { if (e.target !== null) updatePills(selectedPrescriptionIndex, (e.target as HTMLInputElement).value); }}>
         </label>
         <br>
         Pills per day: {$prescriptions[selectedPrescriptionIndex].perDay}
@@ -113,12 +133,18 @@
     </div>
 {/if}
 
+{#if remainingTime > 0 && $prescriptions.length > 0}
+    <div>
+        <h3>Time until next pill: {Math.floor(remainingTime / 1000)} seconds</h3>
+    </div>
+{/if}
+
 <style>
     button {
-        font-size: 2em;
+        font-size: 1em;
     }
     form {
-        margin-bottom: 2em;
+        margin-bottom: 1em;
     }
     label {
         display: block;
@@ -126,7 +152,7 @@
     }
     ul {
         list-style-type: none;
-        padding: 1;
+        padding: 0;
     }
     li {
         margin-bottom: 1em;
