@@ -102,27 +102,30 @@
 		}
 	}
 </script>
-
-<div class="container">
+<br />
+<br />
+<br />
+<h1 class="h1 items-center flex flex-col">Prescription Tracker</h1>
+<div class="flex flex-col items-center justify-center auto-rows-auto" >
 	<form on:submit|preventDefault={addPrescription}>
 		<label>
 			Number of pills:
-			<input type="number" bind:value={pills} required />
+			<input class="input" type="number" bind:value={pills} required />
 		</label>
-		<br />
+
 		<label>
 			Pills per day:
-			<input type="number" bind:value={perDay} required />
+			<input class="input" type="number" bind:value={perDay} required />
 		</label>
-		<br />
+	
 		<label>
 			Hours between pills:
-			<input type="number" bind:value={hoursBetween} required />
+			<input class = "input" type="number" bind:value={hoursBetween} required />
 		</label>
-		<br />
-		<button type="submit" class="btn preset-filled-primary-500">Add new prescription </button>
-	</form>
-
+		<button type="submit" 
+            class="btn preset-filled-primary-500">
+                Add new prescription </button>
+	
 	{#if $prescriptions.length > 0}
 		<button
 			type="button"
@@ -132,18 +135,21 @@
 			Remove selected prescription
 		</button>
 	{/if}
-
 	{#if $prescriptions.length > 0}
 		<button
 			type="button"
 			class="btn preset-filled-primary-500"
 			on:click={() => takePill(selectedPrescriptionIndex)}
-		>
-			Taken pill
+		>Taken pill
 		</button>
 	{/if}
-
-	<label class="dropdown">
+</div>
+<div class = "flex flex-col items-center justify-center auto-rows-auto">
+	{#if $prescriptions.length === 0}
+		<p>No prescriptions added yet.</p>
+	{/if}
+	{#if $prescriptions.length > 0}
+	<label>
 		Select a prescription:
 		<select bind:value={selectedPrescriptionIndex}>
 			{#each $prescriptions as _, index}
@@ -151,10 +157,10 @@
 			{/each}
 		</select>
 	</label>
-
+	{/if}
+</div>
 	{#if $prescriptions.length > 0}
-		<div>
-			<h3>Selected Prescription</h3>
+		<div class = "flex flex-row items-center justify-center auto-rows-auto">
 			<br />
 			Number of pills: {$prescriptions[selectedPrescriptionIndex].pills}
 			<br />
@@ -169,18 +175,9 @@
 			<h3>Time until next pill: {formatTime(remainingTime)}</h3>
 		</div>
 	{/if}
-</div>
+
 
 <style>
-	.container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		height: 100vh;
-		text-align: center;
-	}
-
 	button {
 		font-size: 1em;
 		margin-top: 0.5em;
@@ -204,7 +201,4 @@
 		margin-bottom: 1em;
 	}
 
-	.dropdown {
-		margin-top: 4em;
-	}
 </style>
