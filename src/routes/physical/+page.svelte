@@ -7,7 +7,7 @@
 		['Mountain climbers', 'Squat jumps', 'High knees'],
 		['Push-Ups', 'Pull-Ups', 'Lunges'],
 		['Quad stretch', 'Leg stretches', 'Knee to chest'],
-		['Squats', 'Plank', 'Single-leg stands']
+		['Squats', 'Heel-to-toe walk', 'Single-leg stands']
 	]);
 	let exerciseTypeEnabled = $state([false, false, false, false]);
 	let exerciseSubEnabled = $state([
