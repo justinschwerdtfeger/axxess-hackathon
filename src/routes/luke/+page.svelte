@@ -7,7 +7,7 @@
     let perDay = '';
     let hoursBetween = '';
     let selectedPrescriptionIndex = 0;
-
+    let success = new Audio("ding.mp3");
     function addPrescription() {
         if (pills && perDay && hoursBetween) {
             prescriptions.update(prescriptions => {
@@ -45,6 +45,7 @@
     $: {
         if ($prescriptions[selectedPrescriptionIndex] && $prescriptions[selectedPrescriptionIndex].pills === 0) {
             removePrescription(selectedPrescriptionIndex);
+            success.play();
         }
     }
 </script>
