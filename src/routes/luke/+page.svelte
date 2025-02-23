@@ -111,17 +111,18 @@
             <input type="number" bind:value={hoursBetween} required>
         </label>
         <br>
-        <button type="submit">Add new prescription</button>
+        <button type="submit" class="btn preset-filled-primary-500">Add new prescription 
+        </button>
     </form>
 
     {#if $prescriptions.length > 0}
-        <button type="button" on:click={() => removePrescription(selectedPrescriptionIndex)}>
+        <button type="button" class="btn preset-filled-error-500" on:click={() => removePrescription(selectedPrescriptionIndex)}>
             Remove selected prescription 
         </button>
     {/if}
 
     {#if $prescriptions.length > 0}
-        <button type="button" on:click={() => takePill(selectedPrescriptionIndex)}>
+        <button type="button" class="btn preset-filled-primary-500" on:click={() => takePill(selectedPrescriptionIndex)}>
             Taken pill
         </button>
     {/if}
