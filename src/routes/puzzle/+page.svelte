@@ -54,15 +54,16 @@
 	}
 	function handleLeft() {
 		let zeroPos = findZero();
-
 		v[zeroPos[0]][zeroPos[1]] = v[zeroPos[0]][zeroPos[1] - 1];
 		v[zeroPos[0]][zeroPos[1] - 1] = 0;
 	}
 	function handleRight() {
 		let zeroPos = findZero();
+		if(zeroPos[1]<3){
+			v[zeroPos[0]][zeroPos[1]] = v[zeroPos[0]][zeroPos[1] + 1];
+			v[zeroPos[0]][zeroPos[1] + 1] = 0;
+		}
 
-		v[zeroPos[0]][zeroPos[1]] = v[zeroPos[0]][zeroPos[1] + 1];
-		v[zeroPos[0]][zeroPos[1] + 1] = 0;
 	}
 </script>
 
