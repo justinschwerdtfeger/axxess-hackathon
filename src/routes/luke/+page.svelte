@@ -1,194 +1,210 @@
 <script lang="ts">
-    import { prescriptions } from './stores';
-    import { get } from 'svelte/store';
-    import { onMount } from 'svelte';
+	import { prescriptions } from './stores';
+	import { get } from 'svelte/store';
+	import { onMount } from 'svelte';
 
-    let pills = '';
-    let perDay = '';
-    let hoursBetween = '';
-    let selectedPrescriptionIndex = 0;
-    let success: HTMLAudioElement;
-    let alarm: HTMLAudioElement;
-    let remainingTime = 0;
-    let timerInterval: ReturnType<typeof setInterval>;
+	let pills = '';
+	let perDay = '';
+	let hoursBetween = '';
+	let selectedPrescriptionIndex = 0;
+	let success: HTMLAudioElement;
+	let alarm: HTMLAudioElement;
+	let remainingTime = 0;
+	let timerInterval: ReturnType<typeof setInterval>;
 
-    onMount(() => {
-        success = new Audio("ding.mp3");
-        success.onerror = () => {
-            console.error("Failed to load audio file.");
-        };
-        alarm = new Audio("beep.mp3");
-        alarm.onerror = () => {
-            console.error("Failed to load audio file.");
-        };
-    });
+	onMount(() => {
+		success = new Audio('ding.mp3');
+		success.onerror = () => {
+			console.error('Failed to load audio file.');
+		};
+		alarm = new Audio('beep.mp3');
+		alarm.onerror = () => {
+			console.error('Failed to load audio file.');
+		};
+	});
 
-    function addPrescription() {
-        if (pills && perDay && hoursBetween) {
-            prescriptions.update(prescriptions => {
-                prescriptions.push({ pills: Number(pills), perDay: Number(perDay), hoursBetween: Number(hoursBetween) });
-                return prescriptions;
-            });
-            pills = '';
-            perDay = '';
-            hoursBetween = '';
-        } else {
-            alert('Please fill in all fields!');
-        }
-    }
+	function addPrescription() {
+		if (pills && perDay && hoursBetween) {
+			prescriptions.update((prescriptions) => {
+				prescriptions.push({
+					pills: Number(pills),
+					perDay: Number(perDay),
+					hoursBetween: Number(hoursBetween)
+				});
+				return prescriptions;
+			});
+			pills = '';
+			perDay = '';
+			hoursBetween = '';
+		} else {
+			alert('Please fill in all fields!');
+		}
+	}
 
-    function updatePills(index: number, value: string) {
-        prescriptions.update(prescriptions => {
-            prescriptions[index].pills = Number(value);
-            return prescriptions;
-        });
-    }
+	function updatePills(index: number, value: string) {
+		prescriptions.update((prescriptions) => {
+			prescriptions[index].pills = Number(value);
+			return prescriptions;
+		});
+	}
 
-    function takePill(index: number) {
-        prescriptions.update(prescriptions => {
-            if (prescriptions[index].pills > 0) {
-                prescriptions[index].pills -= 1;
-                setTimer(prescriptions[index]);
-            }
-            return prescriptions;
-        });
-    }
+	function takePill(index: number) {
+		prescriptions.update((prescriptions) => {
+			if (prescriptions[index].pills > 0) {
+				prescriptions[index].pills -= 1;
+				setTimer(prescriptions[index]);
+			}
+			return prescriptions;
+		});
+	}
 
-    function removePrescription(index: number) {
-        prescriptions.update(prescriptions => prescriptions.filter((_, i) => i !== index));
-    }
+	function removePrescription(index: number) {
+		prescriptions.update((prescriptions) => prescriptions.filter((_, i) => i !== index));
+	}
 
-    function setTimer(prescription: { pills: number; perDay: number; hoursBetween: number }) {
-        const milliseconds = prescription.hoursBetween * 60 * 60 * 1000;
-        remainingTime = milliseconds;
+	function setTimer(prescription: { pills: number; perDay: number; hoursBetween: number }) {
+		const milliseconds = prescription.hoursBetween * 60 * 60 * 1000;
+		remainingTime = milliseconds;
 
-        if (timerInterval) {
-            clearInterval(timerInterval);
-        }
+		if (timerInterval) {
+			clearInterval(timerInterval);
+		}
 
-        timerInterval = setInterval(() => {
-            remainingTime -= 1000;
-            if (remainingTime <= 0) {
-                clearInterval(timerInterval);
-                if (alarm) {
-                    alarm.play();
-                }
-                alert(`Time to take your next pill for prescription with ${prescription.pills} pills, ${prescription.perDay} per day, ${prescription.hoursBetween} hours between.`);
-            }
-        }, 1000);
-    }
+		timerInterval = setInterval(() => {
+			remainingTime -= 1000;
+			if (remainingTime <= 0) {
+				clearInterval(timerInterval);
+				if (alarm) {
+					alarm.play();
+				}
+				alert(
+					`Time to take your next pill for prescription with ${prescription.pills} pills, ${prescription.perDay} per day, ${prescription.hoursBetween} hours between.`
+				);
+			}
+		}, 1000);
+	}
 
-    function formatTime(ms: number) {
-        const totalSeconds = Math.floor(ms / 1000);
-        const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-        const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-        const seconds = String(totalSeconds % 60).padStart(2, '0');
-        return `${hours}:${minutes}:${seconds}`;
-    }
+	function formatTime(ms: number) {
+		const totalSeconds = Math.floor(ms / 1000);
+		const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+		const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+		const seconds = String(totalSeconds % 60).padStart(2, '0');
+		return `${hours}:${minutes}:${seconds}`;
+	}
 
-    $: {
-        if ($prescriptions[selectedPrescriptionIndex] && $prescriptions[selectedPrescriptionIndex].pills === 0) {
-            removePrescription(selectedPrescriptionIndex);
-            success.play();
-        }
-    }
+	$: {
+		if (
+			$prescriptions[selectedPrescriptionIndex] &&
+			$prescriptions[selectedPrescriptionIndex].pills === 0
+		) {
+			removePrescription(selectedPrescriptionIndex);
+			success.play();
+		}
+	}
 </script>
 
 <div class="container">
-    <form on:submit|preventDefault={addPrescription}>
-        <label>
-            Number of pills:
-            <input type="number" bind:value={pills} required>
-        </label>
-        <br>
-        <label>
-            Pills per day:
-            <input type="number" bind:value={perDay} required>
-        </label>
-        <br>
-        <label>
-            Hours between pills:
-            <input type="number" bind:value={hoursBetween} required>
-        </label>
-        <br>
-        <button type="submit" class="btn preset-filled-primary-500">Add new prescription 
-        </button>
-    </form>
+	<form on:submit|preventDefault={addPrescription}>
+		<label>
+			Number of pills:
+			<input type="number" bind:value={pills} required />
+		</label>
+		<br />
+		<label>
+			Pills per day:
+			<input type="number" bind:value={perDay} required />
+		</label>
+		<br />
+		<label>
+			Hours between pills:
+			<input type="number" bind:value={hoursBetween} required />
+		</label>
+		<br />
+		<button type="submit" class="btn preset-filled-primary-500">Add new prescription </button>
+	</form>
 
-    {#if $prescriptions.length > 0}
-        <button type="button" class="btn preset-filled-error-500" on:click={() => removePrescription(selectedPrescriptionIndex)}>
-            Remove selected prescription 
-        </button>
-    {/if}
+	{#if $prescriptions.length > 0}
+		<button
+			type="button"
+			class="btn preset-filled-error-500"
+			on:click={() => removePrescription(selectedPrescriptionIndex)}
+		>
+			Remove selected prescription
+		</button>
+	{/if}
 
-    {#if $prescriptions.length > 0}
-        <button type="button" class="btn preset-filled-primary-500" on:click={() => takePill(selectedPrescriptionIndex)}>
-            Taken pill
-        </button>
-    {/if}
+	{#if $prescriptions.length > 0}
+		<button
+			type="button"
+			class="btn preset-filled-primary-500"
+			on:click={() => takePill(selectedPrescriptionIndex)}
+		>
+			Taken pill
+		</button>
+	{/if}
 
-    <label class="dropdown">
-        Select a prescription:
-        <select bind:value={selectedPrescriptionIndex}>
-            {#each $prescriptions as _, index}
-                <option value={index}>Prescription {index + 1}</option>
-            {/each}
-        </select>
-    </label>
+	<label class="dropdown">
+		Select a prescription:
+		<select bind:value={selectedPrescriptionIndex}>
+			{#each $prescriptions as _, index}
+				<option value={index}>Prescription {index + 1}</option>
+			{/each}
+		</select>
+	</label>
 
-    {#if $prescriptions.length > 0}
-        <div>
-            <h3>Selected Prescription</h3>
-            <br>
-            Number of pills: {$prescriptions[selectedPrescriptionIndex].pills}
-            <br>
-            Pills per day: {$prescriptions[selectedPrescriptionIndex].perDay}
-            <br>
-            Hours between pills: {$prescriptions[selectedPrescriptionIndex].hoursBetween}
-        </div>
-    {/if}
+	{#if $prescriptions.length > 0}
+		<div>
+			<h3>Selected Prescription</h3>
+			<br />
+			Number of pills: {$prescriptions[selectedPrescriptionIndex].pills}
+			<br />
+			Pills per day: {$prescriptions[selectedPrescriptionIndex].perDay}
+			<br />
+			Hours between pills: {$prescriptions[selectedPrescriptionIndex].hoursBetween}
+		</div>
+	{/if}
 
-    {#if remainingTime > 0 && $prescriptions.length > 0}
-        <div>
-            <h3>Time until next pill: {formatTime(remainingTime)}</h3>
-        </div>
-    {/if}
+	{#if remainingTime > 0 && $prescriptions.length > 0}
+		<div>
+			<h3>Time until next pill: {formatTime(remainingTime)}</h3>
+		</div>
+	{/if}
 </div>
 
 <style>
-    .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
-    }
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 100vh;
+		text-align: center;
+	}
 
-    button {
-        font-size: 1em;
-        margin-top: 0.5em;
-    }
+	button {
+		font-size: 1em;
+		margin-top: 0.5em;
+	}
 
-    form {
-        margin-bottom: 1em;
-    }
+	form {
+		margin-bottom: 1em;
+	}
 
-    label {
-        display: block;
-        margin-bottom: 0.5em;
-    }
+	label {
+		display: block;
+		margin-bottom: 0.5em;
+	}
 
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
+	ul {
+		list-style-type: none;
+		padding: 0;
+	}
 
-    li {
-        margin-bottom: 1em;
-    }
+	li {
+		margin-bottom: 1em;
+	}
 
-    .dropdown {
-        margin-top: 4em; 
-    }
+	.dropdown {
+		margin-top: 4em;
+	}
 </style>
