@@ -1,4 +1,3 @@
-<p>Tyler's route</p>
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
@@ -11,7 +10,7 @@
 
     let numberOfExercises = 0
     function findNumberOfExercises(){
-        
+
     }
 
 
@@ -127,7 +126,7 @@ To get started, select the types of exercises you would like to do:<br>
 Enter how many minutes you would like to spend each day exercising:<br>
 <input
 type="number"
-style="background-color:{"#cfcfcf"}"
+style="background-color:{"#4a4a4a"}"
 bind:value={minutesPerDay}
 >
 <br>
@@ -160,7 +159,7 @@ bind:value={minutesPerDay}
 <br>
 <br>
 
-<button onclick={setupStart} style="background-color:{"#cfcfcf"}">
+<button onclick={setupStart} style="background-color:{"#4a4a4a"}">
 	Adjust exercises
 </button>
 
