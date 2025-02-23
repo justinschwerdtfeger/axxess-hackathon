@@ -90,9 +90,22 @@
 		<!-- <span class="space">&nbsp;{num}&nbsp;</span> -->
 	{/each}
 	<br />
+
 </div>
 
 {/each}
+
+<div class="flex flex-col items-center justify-center auto-rows-auto" >
+<label class="flex items-center space-x-2">
+<br>
+<button class="btn preset-filled-primary-500" onclick={handleUp}>Up</button>
+<br>
+<button class="btn preset-filled-primary-500" onclick={handleLeft}>Left</button>
+<button class="btn preset-filled-primary-500" onclick={handleRight}>Right</button>
+<br>
+<button class="btn preset-filled-primary-500" onclick={handleDown}>Down</button>
+</div>
+
 
 <style>
 	.space {
