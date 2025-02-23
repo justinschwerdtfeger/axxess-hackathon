@@ -90,14 +90,17 @@
 </script>
 
 <p>Dash's route</p>
-<h1>Countdown: {formatTime(remainingTime)}</h1>
-<input  class = "text-black" type="number" bind:value={tempTime} min="1" on:change={updateTime} />
-<button on:click={startTimer}>Start</button>
-<button on:click={stopTimer}>Stop</button>
-<button on:click={resetTimer}>Reset</button>
-<button on:click={add}>Add</button>
-<br />
+<p style="font-size: 20px;" > Countdown: </p>
+<h1 style="font-size: 30px;" >{formatTime(remainingTime)}</h1>
 
-<button style="margin-left: 210px;" on:click={add15s}>15s</button>
-<button on:click={add15m}>15m</button>
-<button on:click={add1h}>1h</button>
+<input class = "text-black" type="number" bind:value={tempTime} min="1" on:change={updateTime} />
+<br />
+<button class="btn preset-filled-success-500" on:click={startTimer}>Start</button>
+<button class="btn preset-filled-error-500" on:click={stopTimer}>Stop</button>
+<button class="btn preset-filled-primary-500" on:click={resetTimer}>Reset</button>
+<button class="btn preset-tonal-success" on:click={add}>Add</button>
+<br />
+<button class="btn preset-outlined-surface-500" on:click={add15s}>15s</button>
+<button class="btn preset-outlined-surface-500" on:click={add15m}>15m</button>
+<button class="btn preset-outlined-surface-500" on:click={add1h}>1h</button>
+
