@@ -1,10 +1,18 @@
 <p>Dash's route</p>
-<script lang="js">
+<script lang="ts">
+    import { onMount } from 'svelte';
     let time = 0;
     // @ts-ignore
     let interval;
-    let alarm = new Audio("beep.mp3"); // Example sound
     let remainingTime = time;
+    let alarm: HTMLAudioElement;
+
+onMount(() => {
+    alarm = new Audio("beep.mp3");
+    alarm.onerror = () => {
+        console.error("Failed to load audio file.");
+    };
+});
     function startTimer(){
         // @ts-ignore
         if(!interval && remainingTime > 0) {
@@ -15,7 +23,9 @@
                 }else{
                     // @ts-ignore
                     clearInterval(interval);
-                    playAlarm();
+                    if(alarm){
+                        playAlarm();
+                    }
                 interval = null;
             }
         }, 1000)
