@@ -22,7 +22,7 @@
 		<!-- Component -->
 		<Navigation.Rail>
 			{#snippet tiles()}
-				<Navigation.Tile id="0" label="Perscription" href="/prescription">
+				<Navigation.Tile id="0" label="Prescription" href="/prescription">
 					<Pill />
 				</Navigation.Tile>
 				<Navigation.Tile id="1" label="Eye Timer" href="/eye-timer">
