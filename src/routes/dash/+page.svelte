@@ -87,19 +87,9 @@
 		return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
 	}
 </script>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 <div class="flex flex-col items-center justify-center">
 	<h1 class="h1">Countdown</h1>
 	<h1 class="h1">{formatTime(remainingTime)}</h1>
-
-	<!-- <input class="text-black" type="number" bind:value={tempTime} min="1" on:change={updateTime} /> -->
 
 	<label class="label max-w-sm">
 		<span class="label-text"></span>

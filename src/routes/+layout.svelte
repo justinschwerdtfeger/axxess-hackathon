@@ -5,10 +5,10 @@
 	import { Navigation } from '@skeletonlabs/skeleton-svelte';
 	// Icons
 	import IconMenu from 'lucide-svelte/icons/menu';
-	import IconFolder from 'lucide-svelte/icons/folder';
-	import IconImage from 'lucide-svelte/icons/image';
-	import IconMusic from 'lucide-svelte/icons/music';
-	import IconVideo from 'lucide-svelte/icons/video';
+	import Pill from 'lucide-svelte/icons/pill';
+	import Eye from 'lucide-svelte/icons/eye';
+	import Puzzle from 'lucide-svelte/icons/puzzle';
+	import Physical from 'lucide-svelte/icons/biceps-flexed';
 	import IconSettings from 'lucide-svelte/icons/settings';
 
 	let hrefExample = '#';
@@ -21,27 +21,19 @@
 	<div class="card grid h-dvh w-full grid-cols-[auto_1fr] border-[1px] border-surface-100-900">
 		<!-- Component -->
 		<Navigation.Rail>
-			{#snippet header()}
-				<Navigation.Tile href="/" title="Menu"><IconMenu /></Navigation.Tile>
-			{/snippet}
 			{#snippet tiles()}
-				<Navigation.Tile id="0" label="Files" href={hrefExample}>
-					<IconFolder />
+				<Navigation.Tile id="0" label="Perscription" href="/prescription">
+					<Pill />
 				</Navigation.Tile>
-				<Navigation.Tile id="1" label="Images" href={hrefExample}>
-					<IconImage />
+				<Navigation.Tile id="1" label="Eye Timer" href="/eye-timer">
+					<Eye />
 				</Navigation.Tile>
-				<Navigation.Tile id="2" label="Music" href={hrefExample}>
-					<IconMusic />
+				<Navigation.Tile id="2" label="Puzzle" href="/puzzle">
+					<Puzzle />
 				</Navigation.Tile>
-				<Navigation.Tile id="3" label="Videos" href={hrefExample}>
-					<IconVideo />
+				<Navigation.Tile id="3" label="Physical" href="/physical">
+					<Physical />
 				</Navigation.Tile>
-			{/snippet}
-			{#snippet footer()}
-				<Navigation.Tile labelExpanded="Settings" href="/settings" title="settings"
-					><IconSettings /></Navigation.Tile
-				>
 			{/snippet}
 		</Navigation.Rail>
 		<!-- Content -->
@@ -60,17 +52,17 @@
 		<!-- Component -->
 
 		<Navigation.Bar onchange={console.log}>
-			<Navigation.Tile id="0" label="Files">
-				<IconFolder />
+			<Navigation.Tile id="0" label="Prescription" href="/prescription">
+				<Pill />
 			</Navigation.Tile>
-			<Navigation.Tile id="1" label="Images">
-				<IconImage />
+			<Navigation.Tile id="1" label="Eye timer" href="/eye-timer">
+				<Eye />
 			</Navigation.Tile>
-			<Navigation.Tile id="2" label="Music">
-				<IconMusic />
+			<Navigation.Tile id="2" label="Puzzle" href="/puzzle">
+				<Puzzle />
 			</Navigation.Tile>
-			<Navigation.Tile id="3" label="Videos">
-				<IconVideo />
+			<Navigation.Tile id="3" label="Physical" href="physical">
+				<Physical />
 			</Navigation.Tile>
 		</Navigation.Bar>
 	</div>
