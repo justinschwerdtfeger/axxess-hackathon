@@ -6,6 +6,7 @@
     let pills = '';
     let perDay = '';
     let hoursBetween = '';
+    let selectedPrescriptionIndex = 0;
 
     function addPrescription() {
         if (pills && perDay && hoursBetween) {
@@ -48,20 +49,28 @@
     <button type="submit">Add new prescription</button>
 </form>
 
-<ul>
-    {#each $prescriptions as prescription, index}
-        <li>
-            <label>
-                Number of pills:
-                <input type="number" bind:value={prescription.pills} on:input={(e) => updatePills(index, e.target.value)}>
-            </label>
-            <br>
-            Pills per day: {prescription.perDay}
-            <br>
-            Hours between pills: {prescription.hoursBetween}
-        </li>
-    {/each}
-</ul>
+<label>
+    Select a prescription:
+    <select bind:value={selectedPrescriptionIndex}>
+        {#each $prescriptions as _, index}
+            <option value={index}>Prescription {index + 1}</option>
+        {/each}
+    </select>
+</label>
+
+{#if $prescriptions.length > 0}
+    <div>
+        <h3>Selected Prescription</h3>
+        <label>
+            Number of pills:
+            <input type="number" bind:value={$prescriptions[selectedPrescriptionIndex].pills} on:input={(e) => updatePills(selectedPrescriptionIndex, e.target.value)}>
+        </label>
+        <br>
+        Pills per day: {$prescriptions[selectedPrescriptionIndex].perDay}
+        <br>
+        Hours between pills: {$prescriptions[selectedPrescriptionIndex].hoursBetween}
+    </div>
+{/if}
 
 <style>
     button {
